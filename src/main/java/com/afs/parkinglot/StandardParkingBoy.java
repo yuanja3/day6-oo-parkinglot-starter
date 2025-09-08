@@ -22,6 +22,10 @@ public class StandardParkingBoy {
         parkingLots.add(parkingLot);
     }
 
+    public List<ParkingLot> getManagedParkingLots() {
+        return new ArrayList<>(parkingLots);
+    }
+
     public ParkingTicket park(Car car) {
         if (parkingLots.isEmpty()) {
             throw new ParkingException("No parking lot managed.");
@@ -41,9 +45,17 @@ public class StandardParkingBoy {
             throw new ParkingException("No parking lot managed.");
         }
 
+        if (ticket == null) {
+            throw new ParkingException("Unrecognized parking ticket.");
+        }
+
+
         for (ParkingLot parkingLot : parkingLots) {
             try {
-                return parkingLot.fetch(ticket);
+                Car car = parkingLot.fetch(ticket);
+                if (car != null) {
+                    return car;
+                }
             } catch (ParkingException e) {
                 continue;
             }
